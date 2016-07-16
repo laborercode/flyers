@@ -26,7 +26,7 @@ public class PojoGenerator {
     private boolean generated;
     private final String className;
     private List<String> fieldNames;
-    protected PojoWriter writer;
+    protected PojoBuilder writer;
 
     public PojoGenerator(String className) {
         this.className = className;
@@ -59,8 +59,8 @@ public class PojoGenerator {
             SecurityException {
         Object obj = null;
         if(!generated) {
-            writer = new PojoWriter(className, fieldNames);
-            compile(writer.getPojo());
+            writer = new PojoBuilder(className, fieldNames);
+            compile(writer.build());
 
             generated = true;
         }

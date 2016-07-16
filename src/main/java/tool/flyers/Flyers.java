@@ -8,8 +8,6 @@ import tool.flyers.model.ExcelReader;
 import tool.flyers.model.ItemGenerator;
 import tool.flyers.model.ModelBuilder;
 import tool.flyers.model.ModelReader;
-import tool.flyers.model.PojoGenerator;
-import de.neuland.jade4j.Jade4J;
 
 public class Flyers {
 
@@ -27,14 +25,18 @@ public class Flyers {
         for(String field : reader.names()) {
             generator.addField(field);
         }
-        for(String[] valueArr : reader.values()) {
-            Object obj = generator.newInstance(valueArr);
-            items.add(obj);
+        try {
+            for(String[] valueArr : reader.values()) {
+                Object obj = generator.newInstance(valueArr);
+                items.add(obj);
+            }
+            builder.add("items", items);
+            Map<String, Object> model = builder.build();
+    
+            // render
+            //Jade4J.render(filename, model);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        builder.add("items", items);
-        Map<String, Object> model = builder.build();
-
-        // render
-        Jade4J.render(filename, model);
     }
 }
