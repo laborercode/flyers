@@ -14,10 +14,15 @@ public class OptionParser {
     private static final String OPTION_JADE_ARG_NAME = "jadeFileName";
     private static final String OPTION_JADE_DESC = "";
 
-    private static final String OPTION_TEMPLATE_DIR = "t";
-    private static final String OPTION_TEMPLATE_DIR_LONG = "template-dir";
-    private static final String OPTION_TEMPLATE_DIR_ARG_NAME = "templateDir";
-    private static final String OPTION_TEMPLATE_DIR_DESC = "";
+    private static final String OPTION_BASE_DIR = "b";
+    private static final String OPTION_BASE_DIR_LONG = "base-dir";
+    private static final String OPTION_BASE_DIR_ARG_NAME = "baseDir";
+    private static final String OPTION_BASE_DIR_DESC = "";
+
+    private static final String OPTION_MODEL = "m";
+    private static final String OPTION_MODEL_LONG = "model";
+    private static final String OPTION_MODEL_ARG_NAME = "modelFileName";
+    private static final String OPTION_MODEL_DESC = "";
 
     private CommandLineParser parser = new DefaultParser();
     private Options options;
@@ -39,17 +44,25 @@ public class OptionParser {
                 .argName(OPTION_JADE_ARG_NAME)
                 .desc(OPTION_JADE_DESC)
                 .build();
-        Option templateDirOption = Option.builder(OPTION_TEMPLATE_DIR)
-                .longOpt(OPTION_TEMPLATE_DIR_LONG)
+        Option baseDirOption = Option.builder(OPTION_BASE_DIR)
+                .longOpt(OPTION_BASE_DIR_LONG)
                 .hasArg()
-                .argName(OPTION_TEMPLATE_DIR_ARG_NAME)
+                .argName(OPTION_BASE_DIR_ARG_NAME)
                 .required()
-                .desc(OPTION_TEMPLATE_DIR_DESC)
+                .desc(OPTION_BASE_DIR_DESC)
+                .build();
+        Option modelOption = Option.builder(OPTION_MODEL)
+                .longOpt(OPTION_MODEL_LONG)
+                .hasArg()
+                .argName(OPTION_MODEL_ARG_NAME)
+                .required()
+                .desc(OPTION_MODEL_DESC)
                 .build();
 
         options.addOption(helpOption);
-        options.addOption(templateDirOption);
+        options.addOption(baseDirOption);
         options.addOption(jadeOption);
+        options.addOption(modelOption);
         return options;
     }
 
@@ -60,14 +73,25 @@ public class OptionParser {
             cl = parser.parse(options, args);
 
             if(cl.hasOption('h')) {
-                HelpFormatter helpFormatter = new HelpFormatter();
-                helpFormatter.printHelp("java -jar tool.Flyers", options, true);
+                printHelp(0);
+            }
+
+            // required
+            context.setBaseDir(cl.getOptionValue(OPTION_BASE_DIR));
+            context.setModelFileName(cl.getOptionValue(OPTION_MODEL));
+
+            if(cl.hasOption(OPTION_JADE)) {
+                context.setJadeFileName(cl.getOptionValue(OPTION_JADE));
             }
         } catch (ParseException e) {
-            HelpFormatter helpFormatter = new HelpFormatter();
-            helpFormatter.printHelp("java -jar tool.Flyers", options, true);
-            System.exit(1);
+            printHelp(1);
         }
         return context;
+    }
+
+    private void printHelp(int code) {
+        HelpFormatter helpFormatter = new HelpFormatter();
+        helpFormatter.printHelp("java -jar tool.Flyers", options, true);
+        System.exit(code);
     }
 }
