@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
@@ -50,7 +51,7 @@ public class CsvReader implements ModelReader {
     @Override
     public String[] names() {
         if(names == null) {
-            throw new IllegalStateException();
+            return new String[0];
         }
         return names;
     }
@@ -58,7 +59,7 @@ public class CsvReader implements ModelReader {
     @Override
     public List<String[]> values() {
         if(valuesList == null) {
-            throw new IllegalStateException();
+            return Collections.emptyList();
         }
         return valuesList;
     }
