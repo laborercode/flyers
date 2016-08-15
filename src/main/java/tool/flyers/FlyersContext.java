@@ -9,6 +9,8 @@ public class FlyersContext {
 
     private String jadeFileName;
 
+    private String htmlFileName;
+
     public FlyersContext() {
         jadeFileName = DEFAULT_JADEFILE;
     }
@@ -27,6 +29,18 @@ public class FlyersContext {
 
     public void setJadeFileName(String name) {
         jadeFileName = name;
+    }
+
+    public String getHtmlFileName() {
+        if(htmlFileName != null) {
+            return htmlFileName;
+        }
+        int index = jadeFileName.lastIndexOf('.');
+        return jadeFileName.substring(0, index) + ".html";
+    }
+
+    public void setHtmlFileName(String name) {
+        htmlFileName = name;
     }
 
     public String getModelFileName() {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import de.neuland.jade4j.Jade4J;
 import tool.flyers.model.ExcelReader;
 import tool.flyers.model.ItemGenerator;
 import tool.flyers.model.ModelBuilder;
@@ -32,9 +33,11 @@ public class Flyers {
             }
             builder.add("items", items);
             Map<String, Object> model = builder.build();
-    
+
             // render
-            //Jade4J.render(filename, model);
+            String htmlStr = Jade4J.render(context.getJadeFileName(), model);
+            HtmlWriter writer = new HtmlWriter(context.getBaseDir(), context.getHtmlFileName());
+            writer.write(htmlStr);
         } catch (Exception e) {
             e.printStackTrace();
         }
